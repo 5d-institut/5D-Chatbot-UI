@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5D Institut - KI Chatbot</title>
+    
+    <!-- Google Fonts: Open Sans & Roboto Slab -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto+Slab:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="mhc-root">
+    <div class="mhc-header">
+        <div class="mhc-logo-container">
+            <img src="../Logo_NoName_tans.png" alt="5D Institut Logo" class="mhc-logo">
+            <div class="mhc-title-wrap">
+                <h1 class="mhc-title">RIB40 Datenbank-Assistent</h1>
+                <div class="mhc-status" id="mhc-status">bereit</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mhc-messages" id="mhc-messages"></div>
+    
+    <div class="mhc-inputrow">
+        <textarea id="mhc-input" rows="1" placeholder="Frage eingeben ... (Enter = senden, Shift+Enter = Umbruch)"></textarea>
+        <button id="mhc-send" type="button" aria-label="Senden">
+            <i class="fa-solid fa-paper-plane"></i> Senden
+        </button>
+    </div>
+    <div class="mhc-error" id="mhc-error" style="display:none;"></div>
+</div>
+
+<!-- Marked.js for Markdown parsing -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<!-- Main Application Script -->
+<script src="script.js"></script>
+</body>
+</html>
