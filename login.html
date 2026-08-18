@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5D Institut — Sign In</title>
+  <meta name="description" content="Sign in to access the 5D Institut AI Assistant.">
+
+  <!-- Google Fonts: Open Sans + Roboto Slab (per 5D Brandbook) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Roboto+Slab:wght@400;500;700&display=swap"
+    rel="stylesheet">
+
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <link rel="stylesheet" href="css/login.css">
+</head>
+
+<body>
+
+  <!-- ============================================================
+       LOGIN PAGE — Two-panel layout:
+       LEFT:  Brand panel with logo + tagline
+       RIGHT: Authentication form
+  ============================================================ -->
+  <div class="login-root">
+
+    <!-- LEFT PANEL: Brand identity -->
+    <div class="login-brand-panel">
+      <div class="login-brand-inner">
+        <img src="assets/Logo_NoName_negativ_trans.png" alt="5D Institut Logo" class="login-logo">
+        <div class="login-brand-divider"></div>
+        <h1 class="login-brand-headline">Your AI Assistant<br><em>powered by 5D Institut</em></h1>
+        <p class="login-brand-sub">
+          Ask anything - from project data and LV positions to general
+          questions about construction, processes, or anything else on your mind.
+          Your AI assistant is here to help, anytime.
+        </p>
+        <div class="login-brand-footer">
+          <span> </span>
+        </div>
+      </div>
+
+      <!-- Circular arrow logo — decorative background element -->
+      <img src="assets/Logo_circularArrow.png" alt="" aria-hidden="true" class="login-brand-circle-img">
+
+    </div>
+
+    <!-- RIGHT PANEL: Authentication form -->
+    <div class="login-form-panel">
+      <div class="login-form-inner">
+
+        <!-- Small logo for mobile / form header -->
+        <div class="login-form-header">
+          <img src="assets/Logo_NoName_tans.png" alt="5D Institut" class="login-form-logo">
+
+          <div>
+            <div class="login-form-title">Welcome back</div>
+            <div class="login-form-subtitle">Sign in with your xdhub account</div>
+          </div>
+        </div>
+
+        <!-- Error banner (hidden by default) -->
+        <div class="login-error" id="login-error" role="alert" style="display:none;">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          <span id="login-error-text">An error occurred.</span>
+        </div>
+
+        <!-- Login form -->
+        <form id="login-form" novalidate>
+          <div class="login-field">
+            <label for="login-username">Username or Email</label>
+            <div class="login-input-wrap">
+              <i class="fa-regular fa-user login-input-icon"></i>
+              <input type="text" id="login-username" name="username" autocomplete="username"
+                placeholder="your@email.com" required>
+            </div>
+          </div>
+
+          <div class="login-field">
+            <label for="login-password">Password</label>
+            <div class="login-input-wrap">
+              <i class="fa-solid fa-lock login-input-icon"></i>
+              <input type="password" id="login-password" name="password" autocomplete="current-password"
+                placeholder="••••••••" required>
+              <!-- Toggle password visibility -->
+              <button type="button" class="login-toggle-pw" id="login-toggle-pw"
+                aria-label="Toggle password visibility">
+                <i class="fa-regular fa-eye" id="login-eye-icon"></i>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="login-submit-btn" id="login-submit-btn">
+            <span id="login-btn-text">Sign In</span>
+            <span id="login-btn-spinner" style="display:none;">
+              <i class="fa-solid fa-spinner fa-spin"></i>
+            </span>
+          </button>
+        </form>
+
+        <p class="login-form-footer-note">
+          Access is managed via your <a href="https://xdhub.de/" target="_blank" rel="noopener noreferrer">xdhub</a>
+          account.<br>
+          Contact your administrator if you cannot sign in.
+        </p>
+
+      </div><!-- /.login-form-inner -->
+    </div><!-- /.login-form-panel -->
+
+  </div><!-- /.login-root -->
+
+  <script src="js/login.js"></script>
+</body>
+
+</html>

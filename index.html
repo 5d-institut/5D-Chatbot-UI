@@ -1,48 +1,223 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>5D Institut - KI Chatbot</title>
-    
-    <!-- Google Fonts: Open Sans & Roboto Slab -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto+Slab:wght@500;700&display=swap" rel="stylesheet">
-    
-    <!-- FontAwesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Styles -->
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5D Institut — AI Assistant</title>
+  <meta name="description" content="Intelligent conversational AI assistant — powered by 5D Institut.">
+
+  <!-- Google Fonts: Open Sans + Roboto Slab (per 5D Brandbook) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Roboto+Slab:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Application styles -->
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<div id="mhc-root">
-    <div class="mhc-header">
-        <div class="mhc-logo-container">
-            <img src="../Logo_NoName_tans.png" alt="5D Institut Logo" class="mhc-logo">
-            <div class="mhc-title-wrap">
-                <h1 class="mhc-title">RIB40 Datenbank-Assistent</h1>
-                <div class="mhc-status" id="mhc-status">bereit</div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="mhc-messages" id="mhc-messages"></div>
-    
-    <div class="mhc-inputrow">
-        <textarea id="mhc-input" rows="1" placeholder="Frage eingeben ... (Enter = senden, Shift+Enter = Umbruch)"></textarea>
-        <button id="mhc-send" type="button" aria-label="Senden">
-            <i class="fa-solid fa-paper-plane"></i> Senden
-        </button>
-    </div>
-    <div class="mhc-error" id="mhc-error" style="display:none;"></div>
-</div>
+  <!--
+    ┌───────────────┬────────────────────────────────────┐
+    │   SIDEBAR     │         MAIN AREA                  │
+    │  280px fixed  │  (chat messages + input)           │
+    │               │                                    │
+    │  · Logo       │  · Chat header (title + status)    │
+    │  · New Chat   │  · Message list                    │
+    │  · History    │  · Input row                       │
+    │  · User info  │                                    │
+    └───────────────┴────────────────────────────────────┘
+  -->
+  <div class="app-root" id="app-root">
 
-<!-- Marked.js for Markdown parsing -->
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<!-- Main Application Script -->
-<script src="script.js"></script>
+    <!-- ══════════════════════════════════════════
+         SIDEBAR
+    ══════════════════════════════════════════ -->
+    <aside class="sidebar" id="sidebar">
+
+      <!-- Brand / Logo -->
+      <div class="sidebar-brand">
+        <img src="assets/Logo_NoName_tans.png" alt="5D Institut Logo" class="sidebar-logo">
+        <div class="sidebar-brand-text">
+          <div class="sidebar-brand-name">5D Institut</div>
+          <div class="sidebar-brand-tagline">AI Assistant</div>
+        </div>
+      </div>
+
+      <!-- New Chat button -->
+      <button class="sidebar-new-chat-btn" id="btn-new-chat" type="button">
+        <i class="fa-solid fa-plus"></i>
+        <span>New Chat</span>
+      </button>
+
+      <!-- Conversation history -->
+      <div class="sidebar-section">
+        <div class="sidebar-section-label">History</div>
+        <!-- History items rendered by script.js -->
+        <nav class="sidebar-history" id="sidebar-history">
+          <!-- Populated dynamically -->
+        </nav>
+      </div>
+
+      <!-- User info footer -->
+      <div class="sidebar-user" id="sidebar-user">
+        <!-- Avatar (initials) -->
+        <div class="sidebar-user-avatar" id="sidebar-user-avatar">--</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name" id="sidebar-user-name">Loading…</div>
+          <div class="sidebar-user-meta" id="sidebar-user-meta">
+            <span class="sidebar-user-role" id="sidebar-user-role"></span>
+            <span class="sidebar-user-company" id="sidebar-user-company"></span>
+          </div>
+        </div>
+        <!-- Sign-out button -->
+        <button class="sidebar-signout-btn" id="btn-signout" title="Sign out" aria-label="Sign out">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </button>
+      </div>
+
+    </aside><!-- /.sidebar -->
+
+    <!-- ══════════════════════════════════════════
+         MAIN AREA
+    ══════════════════════════════════════════ -->
+    <main class="main-area" id="main-area">
+
+      <!-- Chat header -->
+      <div class="chat-header" id="chat-header">
+        <!-- Mobile: hamburger menu -->
+        <button class="chat-header-menu-btn" id="btn-menu" aria-label="Open menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <div class="chat-header-left">
+          <div class="chat-header-title" id="chat-title">AI Assistant</div>
+          <div class="chat-header-status" id="mhc-status">Ready</div>
+        </div>
+
+        <div class="chat-header-actions">
+
+          <!-- Dark / Light mode pill toggle -->
+          <button
+            class="theme-toggle"
+            id="btn-dark-mode"
+            title="Toggle dark mode"
+            aria-label="Toggle dark mode"
+            aria-pressed="false"
+          >
+            <i class="fa-solid fa-sun  theme-toggle-sun"></i>
+            <span class="theme-toggle-track">
+              <span class="theme-toggle-knob"></span>
+            </span>
+            <i class="fa-solid fa-moon theme-toggle-moon"></i>
+          </button>
+
+
+
+          <!-- Admin-only settings button (hidden for non-admins) -->
+          <button class="chat-header-btn admin-only" id="btn-admin-settings" title="Admin Settings" style="display:none;">
+            <i class="fa-solid fa-gear"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Welcome screen (shown before first message in a new chat) -->
+      <div class="chat-welcome" id="chat-welcome">
+        <div class="chat-welcome-inner">
+          <h2 class="chat-welcome-headline">
+            How can I help<br><em>you today?</em>
+          </h2>
+          <p class="chat-welcome-sub">
+            Ask me anything about the database — projects, LV positions, unit prices, and more.
+          </p>
+          <!-- Suggestion cards -->
+          <div class="chat-suggestions" id="chat-suggestions">
+            <button class="chat-suggestion-card" data-prompt="What are the top projects by contract value?">
+              <span class="suggestion-tag">Projects</span>
+              <span class="suggestion-title">Top projects by value</span>
+              <span class="suggestion-desc">List projects ranked by total contract amount.</span>
+            </button>
+            <button class="chat-suggestion-card" data-prompt="Show me the LV positions with the highest unit prices.">
+              <span class="suggestion-tag">Pricing</span>
+              <span class="suggestion-title">Highest unit prices</span>
+              <span class="suggestion-desc">Find the most expensive LV positions in the database.</span>
+            </button>
+            <button class="chat-suggestion-card" data-prompt="Give me a summary of the latest project updates.">
+              <span class="suggestion-tag">Updates</span>
+              <span class="suggestion-title">Latest project updates</span>
+              <span class="suggestion-desc">Recent changes and status across all projects.</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Message list -->
+      <div class="mhc-messages" id="mhc-messages" style="display:none;"></div>
+
+      <!-- Input row -->
+      <div class="mhc-inputrow">
+        <textarea
+          id="mhc-input"
+          rows="1"
+          placeholder="Type your question… (Enter to send, Shift+Enter for new line)"
+        ></textarea>
+        <button id="mhc-send" type="button" aria-label="Send message">
+          <i class="fa-solid fa-paper-plane"></i>
+          <span>Send</span>
+        </button>
+      </div>
+
+      <!-- Error banner -->
+      <div class="mhc-error" id="mhc-error" style="display:none;"></div>
+
+    </main><!-- /.main-area -->
+
+    <!-- ══════════════════════════════════════════
+         ADMIN SETTINGS PANEL (hidden by default)
+         Visible only when user_role === 'administrator'
+    ══════════════════════════════════════════ -->
+    <div class="admin-panel" id="admin-panel" style="display:none;" aria-hidden="true">
+      <div class="admin-panel-inner">
+        <div class="admin-panel-header">
+          <h3 class="admin-panel-title">Admin Settings</h3>
+          <button class="admin-panel-close" id="btn-admin-close" aria-label="Close settings">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="admin-field">
+          <label for="admin-webhook-url">Webhook URL (n8n)</label>
+          <input type="url" id="admin-webhook-url" placeholder="https://n8nki.5d-institut.de/webhook/…">
+        </div>
+        <div class="admin-field">
+          <label for="admin-timeout">Request Timeout (ms)</label>
+          <input type="number" id="admin-timeout" min="5000" max="600000" step="1000" value="180000">
+        </div>
+        <button class="admin-save-btn" id="btn-admin-save">
+          <i class="fa-solid fa-floppy-disk"></i> Save Settings
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile sidebar overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Delete confirmation popover (rendered into body by JS) -->
+    <div class="delete-confirm-popover" id="delete-confirm-popover" aria-hidden="true" style="display:none;">
+      <span>Delete this conversation?</span>
+      <div class="delete-confirm-actions">
+        <button class="delete-confirm-yes" id="delete-confirm-yes">Delete</button>
+        <button class="delete-confirm-no" id="delete-confirm-no">Cancel</button>
+      </div>
+    </div>
+
+  </div><!-- /.app-root -->
+
+  <!-- Marked.js for Markdown rendering in chat messages -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <!-- Main application script -->
+  <script src="js/script.js"></script>
 </body>
 </html>
